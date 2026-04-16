@@ -8,6 +8,7 @@ export default function BreedList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filterInput, setFilterInput ] = useState('')
+  const [selectedBreed, setSelectedBreed] = useState<BreedType | null>(null)
   const [debouncedFitler, setDebouncedFilter]= useState('')
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export default function BreedList() {
     <>
       {loading ? <p>Loading dog breeds ...</p> : null}
       {error ? <p>error loading</p> : null}
+      <div style={{display: 'flex', gap: '50px'}}>
       <div>
         <h1>BreedLists</h1>
         <input
@@ -51,13 +53,12 @@ export default function BreedList() {
           onChange={(event) => setFilterInput(event.target.value)}
           placeholder="type a bread name"
         />
-      </div>
-      {filtered.length > 0 ? (
+              {filtered.length > 0 ? (
         <div>
           <div style={{ display: "flex", gap: "100px" }}>
             <ul>
               {filtered.map((breed) => (
-                <li key={breed.name}>{breed.name}</li>
+                <li key={breed.name} onClick={()=> setSelectedBreed(breed)} style={{background: selectedBreed?.name === breed.name ? 'orange' : 'none'}}>{breed.name}</li>
               ))}
             </ul>
           </div>
@@ -65,6 +66,13 @@ export default function BreedList() {
       ) : (
         <p>no breeds to match your filter input</p>
       )}
+      </div>
+
+      <div>
+        <h2>selected breed: {selectedBreed?.name}</h2>
+      </div>
+      </div>
+
     </>
   );
 }
