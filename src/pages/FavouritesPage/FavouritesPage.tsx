@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
+import { config } from "../../config";
 import styles from "./FavouritesPage.module.scss";
-
-const API_URL = "http://localhost:3000/api/favourites";
 
 export default function FavouritesPage() {
   const [favourites, setFavourites] = useState<string[]>([]);
@@ -11,7 +10,7 @@ export default function FavouritesPage() {
   useEffect(() => {
     const fetchFavourites = async () => {
       try {
-        const res = await fetch(API_URL);
+        const res = await fetch(config.favouritesApiUrl);
         const data = await res.json();
         setFavourites(data);
       } catch {
@@ -25,7 +24,7 @@ export default function FavouritesPage() {
 
   const removeFavourite = async (imageUrl: string) => {
     try {
-      const res = await fetch(API_URL, {
+      const res = await fetch(config.favouritesApiUrl, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ imageUrl }),

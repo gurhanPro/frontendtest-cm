@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { User, AuthResponse } from "../types";
+import { config } from "../config";
 
 type AuthContextType = {
   user: User | null;
@@ -26,7 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const validateSession = async () => {
       try {
-        const res = await fetch("https://dummyjson.com/auth/me", {
+        const res = await fetch(`${config.authApiUrl}/auth/me`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
         if (!res.ok) throw new Error("Token expired");
@@ -47,7 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refreshSession = async () => {
     try {
-      const res = await fetch("https://dummyjson.com/auth/refresh", {
+      const res = await fetch(`${config.authApiUrl}/auth/refresh`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refreshToken, expiresInMins: 30 }),
@@ -63,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const login = async (username: string, password: string) => {
-    const res = await fetch("https://dummyjson.com/auth/login", {
+    const res = await fetch(`${config.authApiUrl}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password, expiresInMins: 30 }),

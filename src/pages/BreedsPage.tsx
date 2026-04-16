@@ -4,6 +4,7 @@ import useDebounce from "../hooks/useDebounce";
 import SearchInput from "../components/SearchInput/SearchInput";
 import BreedList from "../components/BreedList/BreedList";
 import BreedImages from "../components/BreedImages/BreedImages";
+import { config } from "../config";
 import styles from "./BreedsPage.module.scss";
 
 export default function BreedsPage() {
@@ -17,7 +18,7 @@ export default function BreedsPage() {
   useEffect(() => {
     const fetchBreeds = async () => {
       try {
-        const resOjb = await fetch("https://dog.ceo/api/breeds/list/all");
+        const resOjb = await fetch(`${config.dogApiUrl}/breeds/list/all`);
         const res = (await resOjb.json()) as { message: BreedsAPIResponse };
         const breedArrayFormat = Object.entries(res.message).map(
           ([name, subBreeds]) => ({ name, subBreeds }),

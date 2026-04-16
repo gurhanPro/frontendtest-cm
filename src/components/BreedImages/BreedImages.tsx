@@ -1,8 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import type { BreedType } from "../../types";
+import { config } from "../../config";
 import styles from "./BreedImages.module.scss";
-
-const FAVOURITES_API = "http://localhost:3000/api/favourites";
 
 export default function BreedImages({ selectedBreed }: { selectedBreed: BreedType | null }) {
   const [selectedBreedImages, setSelectedBreedImages] = useState<string[]>([])
@@ -14,7 +13,7 @@ export default function BreedImages({ selectedBreed }: { selectedBreed: BreedTyp
   useEffect(() => {
     const fetchFavourites = async () => {
       try {
-        const res = await fetch(FAVOURITES_API)
+        const res = await fetch(config.favouritesApiUrl)
         const data = await res.json()
         setFavourites(data)
       } catch {
@@ -27,7 +26,7 @@ export default function BreedImages({ selectedBreed }: { selectedBreed: BreedTyp
   const toggleFavourite = async (imageUrl: string) => {
     const isFav = favourites.includes(imageUrl)
     try {
-      const res = await fetch(FAVOURITES_API, {
+      const res = await fetch(config.favouritesApiUrl, {
         method: isFav ? "DELETE" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ imageUrl }),
@@ -51,7 +50,7 @@ export default function BreedImages({ selectedBreed }: { selectedBreed: BreedTyp
       try {
         setLoading(true)
         setError(null)
-        const res = await fetch(`https://dog.ceo/api/breed/${selectedBreed.name}/images/random/3`)
+        const res = await fetch(`${config.dogApiUrl}/breed/${selectedBreed.name}/images/random/3`)
         const resBody = await res.json()
         cache.current.set(selectedBreed.name, resBody.message)
         setSelectedBreedImages(resBody.message)
