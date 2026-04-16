@@ -1,5 +1,7 @@
 # Dog Breed Explorer
 
+Deployed at https://cloudsmiths-frontend.pages.dev
+
 ## Setup
 
 ```bash
