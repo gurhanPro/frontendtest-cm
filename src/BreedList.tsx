@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-
-type BreedType = { name: string; subBreeds: string[] };
-type BreedsAPIResponse = Record<string, string[]>;
+import type { BreedsAPIResponse, BreedType } from "./types";
 
 export default function BreedList() {
   const [breeds, setBreeds] = useState<BreedType[]>([]);
@@ -49,7 +47,9 @@ export default function BreedList() {
       setSelectedBreedImages(resBody.message)
     }
 
-    fetch3RandomImages()
+    if(selectedBreed){
+      fetch3RandomImages()
+    }
 
   }, [selectedBreed])
 
