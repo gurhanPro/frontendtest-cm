@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { AuthResponse } from "../types";
+import type { User, AuthResponse } from "../types";
 import { AuthContext } from "./AuthContextType";
 import { config } from "../config";
 

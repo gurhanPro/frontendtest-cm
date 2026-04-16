@@ -10,7 +10,7 @@ import styles from "./BreedsPage.module.scss";
 export default function BreedsPage() {
   const [breeds, setBreeds] = useState<BreedType[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [filterInput, setFilterInput] = useState("");
   const [selectedBreed, setSelectedBreed] = useState<BreedType | null>(null);
   const debouncedFitler = useDebounce(filterInput, 300)
