@@ -24,8 +24,8 @@ export default function BreedsPage() {
           ([name, subBreeds]) => ({ name, subBreeds }),
         );
         setBreeds(breedArrayFormat);
-      } catch (err: any) {
-        setError(err);
+      } catch {
+        setError("Failed to load breeds");
       } finally {
         setLoading(false);
       }
