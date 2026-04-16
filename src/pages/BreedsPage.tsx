@@ -24,7 +24,6 @@ export default function BreedsPage() {
         );
         setBreeds(breedArrayFormat);
       } catch (err: any) {
-        console.log("error fetching breedlist", err);
         setError(err);
       } finally {
         setLoading(false);
