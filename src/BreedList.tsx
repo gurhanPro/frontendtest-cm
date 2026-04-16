@@ -8,6 +8,7 @@ export default function BreedList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filterInput, setFilterInput ] = useState('')
+  const [debouncedFitler, setDebouncedFilter]= useState('')
 
   useEffect(() => {
     const fetchBreeds = async () => {
@@ -30,7 +31,12 @@ export default function BreedList() {
     fetchBreeds();
   }, []);
 
-  const filtered = filterInput ? breeds.filter(breed => breed.name.toLowerCase().includes(filterInput.toLowerCase())) : breeds
+  useEffect(()=> {
+    const timer = setTimeout(()=> { setDebouncedFilter(filterInput)}, 300)
+    return () => clearTimeout(timer)
+  },[filterInput])
+
+  const filtered = debouncedFitler ? breeds.filter(breed => breed.name.toLowerCase().includes(debouncedFitler.toLowerCase())) : breeds
 
   return (
     <>
