@@ -1,5 +1,5 @@
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import styles from "./Navbar.module.scss";
 
 export default function Navbar() {
@@ -15,12 +15,16 @@ export default function Navbar() {
 
   return (
     <nav className={styles.nav}>
+      <div className={styles.links}>
+        <Link to="/" className={styles.link}>Breeds</Link>
+        <Link to="/favourites" className={styles.link}>Favourites</Link>
+      </div>
       <div className={styles.userInfo}>
         <span>{user.firstName} {user.lastName}</span>
+        <button onClick={handleLogout} className={styles.logoutBtn}>
+          Logout
+        </button>
       </div>
-      <button onClick={handleLogout} className={styles.logoutBtn}>
-        Logout
-      </button>
     </nav>
   );
 }

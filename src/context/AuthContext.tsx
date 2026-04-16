@@ -24,22 +24,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!accessToken) return;
 
-    fetch("https://dummyjson.com/auth/me", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    })
-      .then((res) => {
+    const validateSession = async () => {
+      try {
+        const res = await fetch("https://dummyjson.com/auth/me", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
         if (!res.ok) throw new Error("Token expired");
-        return res.json();
-      })
-      .then((data) => setUser(data))
-      .catch(() => {
+        const data = await res.json();
+        setUser(data);
+      } catch {
         if (refreshToken) {
-          return refreshSession();
+          await refreshSession();
         } else {
           clearAuth();
         }
-      })
-      .finally(() => setIsLoading(false));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    validateSession();
   }, []);
 
   const refreshSession = async () => {

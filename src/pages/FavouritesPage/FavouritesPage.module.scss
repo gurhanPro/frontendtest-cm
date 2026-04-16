@@ -1,16 +1,17 @@
 .container {
-  flex: 1;
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .title {
-  text-transform: capitalize;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 16px;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
@@ -21,7 +22,7 @@
   }
 }
 
-.imageCard {
+.card {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   overflow: hidden;
@@ -32,53 +33,39 @@
   overflow: hidden;
 }
 
-.favBtn {
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.removeBtn {
   width: 100%;
   padding: 8px;
   background: none;
   border: none;
   border-top: 1px solid #e0e0e0;
+  color: red;
   cursor: pointer;
   font-size: 13px;
   transition: background 0.15s ease;
-
-  &:hover {
-    background: #f5f5f5;
-  }
-}
-
-.favourited {
-  color: #e11d48;
-  font-weight: 600;
 
   &:hover {
     background: #fef2f2;
   }
 }
 
-.image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-}
-
 .loading {
+  padding: 24px;
   color: #888;
-  padding: 24px 0;
 }
 
 .error {
+  padding: 24px;
   color: red;
-  padding: 24px 0;
 }
 
 .empty {
   color: #888;
   font-style: italic;
-  padding: 24px 0;
 }
