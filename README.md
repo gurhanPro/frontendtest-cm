@@ -2,6 +2,10 @@
 
 Deployed at https://cloudsmiths-frontend.pages.dev
 
+Backend: https://backend-cm-production.up.railway.app
+Backend repo: https://github.com/gurhanPro/backend-cm
+Swagger docs: https://backend-cm-production.up.railway.app/api/docs
+
 ## Setup
 
 ```bash
