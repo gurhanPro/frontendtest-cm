@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import type { BreedsAPIResponse, BreedType } from "./types";
-import useDebounce from "./hooks/useDebounce";
-import SearchInput from "./components/SearchInput/SearchInput";
-import BreedList from "./components/BreedList/BreedList";
-import BreedImages from "./components/BreedImages/BreedImages";
+import type { BreedsAPIResponse, BreedType } from "../types";
+import useDebounce from "../hooks/useDebounce";
+import SearchInput from "../components/SearchInput/SearchInput";
+import BreedList from "../components/BreedList/BreedList";
+import BreedImages from "../components/BreedImages/BreedImages";
 import styles from "./BreedsPage.module.scss";
 
 export default function BreedsPage() {

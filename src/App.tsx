@@ -4,7 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import Navbar from "./components/Navbar/Navbar";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import FavouritesPage from "./pages/FavouritesPage/FavouritesPage";
-import BreedsPage from "./BreedsPage";
+import BreedsPage from "./pages/BreedsPage";
 
 function App() {
   return (
