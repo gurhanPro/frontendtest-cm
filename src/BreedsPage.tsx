@@ -2,14 +2,15 @@ import React, { useEffect, useMemo, useState } from "react";
 import type { BreedsAPIResponse, BreedType } from "./types";
 import useDebounce from "./hooks/useDebounce";
 import SearchInput from "./components/SearchInput/SearchInput";
+import BreedList from "./components/BreedList/BreedList";
+import BreedImages from "./components/BreedImages/BreedImages";
 
-export default function BreedList() {
+export default function BreedsPage() {
   const [breeds, setBreeds] = useState<BreedType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filterInput, setFilterInput] = useState("");
   const [selectedBreed, setSelectedBreed] = useState<BreedType | null>(null);
-  const [selectedBreedImages, setSelectedBreedImages] = useState([])
   const debouncedFitler = useDebounce(filterInput, 300)
 
   useEffect(() => {
@@ -34,19 +35,6 @@ export default function BreedList() {
   }, []);
 
 
-  useEffect(()=> {
-    const fetch3RandomImages = async ()=> {
-      const res = await fetch(`https://dog.ceo/api/breed/${selectedBreed?.name}/images/random/3`)
-      const resBody = await res.json()
-      console.log('images : ', resBody)
-      setSelectedBreedImages(resBody.message)
-    }
-
-    if(selectedBreed){
-      fetch3RandomImages()
-    }
-
-  }, [selectedBreed])
 
   const filtered = useMemo(() => {
     return debouncedFitler
@@ -70,22 +58,11 @@ export default function BreedList() {
           {filtered.length > 0 ? (
             <div>
               <div style={{ display: "flex", gap: "100px" }}>
-                <ul>
-                  {filtered.map((breed) => (
-                    <li
-                      key={breed.name}
-                      onClick={() => setSelectedBreed(breed)}
-                      style={{
-                        background:
-                          selectedBreed?.name === breed.name
-                            ? "orange"
-                            : "none",
-                      }}
-                    >
-                      {breed.name}
-                    </li>
-                  ))}
-                </ul>
+                <BreedList
+                  breeds={filtered}
+                  setSelectedBreed={setSelectedBreed}
+                  selectedBreed={selectedBreed}
+                />
               </div>
             </div>
           ) : (
@@ -93,10 +70,7 @@ export default function BreedList() {
           )}
         </div>
 
-        <div>
-          <h2>selected breed: {selectedBreed?.name}</h2>
-          {selectedBreedImages.map(img=> <img src={img} />)}
-        </div>
+        <BreedImages selectedBreed={selectedBreed } />
       </div>
     </>
   );

@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import './App.css'
-import BreedList from './BreedList'
+import BreedsPage from './BreedsPage'
 
 function App() {
 
   return (
     <>
-      <BreedList />
+      <BreedsPage />
     </>
   )
 }
