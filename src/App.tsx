@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
@@ -8,6 +9,7 @@ import BreedsPage from "./pages/BreedsPage";
 
 function App() {
   return (
+    <Sentry.ErrorBoundary fallback={<p>Something went wrong.</p>}>
     <BrowserRouter>
       <AuthProvider>
         <Navbar />
@@ -32,6 +34,7 @@ function App() {
         </Routes>
       </AuthProvider>
     </BrowserRouter>
+    </Sentry.ErrorBoundary>
   );
 }
 
