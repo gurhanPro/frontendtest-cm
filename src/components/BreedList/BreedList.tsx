@@ -1,4 +1,5 @@
 import type { BreedType } from "../../types";
+import styles from "./BreedList.module.scss";
 
 type BreedListProp = {
   breeds: BreedType[];
@@ -11,17 +12,15 @@ export default function BreedList({
   setSelectedBreed,
   selectedBreed,
 }: BreedListProp) {
-  if (breeds.length === 0) return <p>No breeds match your filter</p>
+  if (breeds.length === 0) return <p className={styles.noResults}>No breeds match your filter</p>
 
   return (
-    <ul>
+    <ul className={styles.list}>
       {breeds.map((breed) => (
         <li
           key={breed.name}
           onClick={() => setSelectedBreed(breed)}
-          style={{
-            background: selectedBreed?.name === breed.name ? "orange" : "none",
-          }}
+          className={`${styles.item} ${selectedBreed?.name === breed.name ? styles.selected : ''}`}
         >
           {breed.name}
         </li>
