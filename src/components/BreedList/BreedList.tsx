@@ -11,6 +11,8 @@ export default function BreedList({
   setSelectedBreed,
   selectedBreed,
 }: BreedListProp) {
+  if (breeds.length === 0) return <p>No breeds match your filter</p>
+
   return (
     <ul>
       {breeds.map((breed) => (

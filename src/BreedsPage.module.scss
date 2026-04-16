@@ -1,0 +1,27 @@
+.page {
+  display: flex;
+  gap: 48px;
+  padding: 24px;
+}
+
+.sidebar {
+  min-width: 280px;
+}
+
+.title {
+  margin-bottom: 16px;
+}
+
+.noResults {
+  color: #888;
+  font-style: italic;
+}
+
+.loading {
+  padding: 24px;
+}
+
+.error {
+  padding: 24px;
+  color: red;
+}

@@ -1,15 +1,29 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { BreedType } from "../../types";
 
 export default function BreedImages({ selectedBreed }: { selectedBreed: BreedType | null }) {
-  const [selectedBreedImages, setSelectedBreedImages] = useState([])
+  const [selectedBreedImages, setSelectedBreedImages] = useState<string[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetch3RandomImages = async () => {
-      const res = await fetch(`https://dog.ceo/api/breed/${selectedBreed?.name}/images/random/3`)
-      const resBody = await res.json()
-      console.log('images : ', resBody)
-      setSelectedBreedImages(resBody.message)
+      try {
+        setLoading(true)
+        setError(null)
+
+        const res = await fetch(`https://dog.ceo/api/breed/${selectedBreed?.name}/images/random/3`)
+        const resBody = await res.json()
+        
+        setSelectedBreedImages(resBody.message)
+      } catch {
+        setError('error loading images ')
+      }
+      finally {
+        setLoading(false)
+
+      }
+
     }
 
     if (selectedBreed) {
@@ -21,6 +35,8 @@ export default function BreedImages({ selectedBreed }: { selectedBreed: BreedTyp
 
   return <div>
     <h2>selected breed: {selectedBreed?.name}</h2>
-    {selectedBreedImages.map(img => <img src={img} />)}
+    {loading && <p>Loading images...</p>}
+    {error && <p>{error}</p>}
+    {selectedBreed ? selectedBreedImages.map(imageUrl => <img key={imageUrl} src={imageUrl} alt={selectedBreed?.name} />) : 'No selected breed yet'}
   </div>;
 }

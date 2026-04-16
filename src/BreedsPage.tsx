@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { BreedsAPIResponse, BreedType } from "./types";
 import useDebounce from "./hooks/useDebounce";
 import SearchInput from "./components/SearchInput/SearchInput";
 import BreedList from "./components/BreedList/BreedList";
 import BreedImages from "./components/BreedImages/BreedImages";
+import styles from "./BreedsPage.module.scss";
 
 export default function BreedsPage() {
   const [breeds, setBreeds] = useState<BreedType[]>([]);
@@ -22,11 +23,9 @@ export default function BreedsPage() {
           ([name, subBreeds]) => ({ name, subBreeds }),
         );
         setBreeds(breedArrayFormat);
-        setLoading(false);
       } catch (err: any) {
         console.log("error fetching breedlist", err);
         setError(err);
-        setLoading(false);
       } finally {
         setLoading(false);
       }
@@ -44,34 +43,27 @@ export default function BreedsPage() {
       : breeds;
   }, [breeds, debouncedFitler]);
 
-  return (
-    <>
-      {loading ? <p>Loading dog breeds ...</p> : null}
-      {error ? <p>error loading</p> : null}
-      <div style={{ display: "flex", gap: "50px" }}>
-        <div>
-          <h1>BreedLists</h1>
-          <SearchInput
-            value={filterInput}
-            onChange={setFilterInput}
-          />
-          {filtered.length > 0 ? (
-            <div>
-              <div style={{ display: "flex", gap: "100px" }}>
-                <BreedList
-                  breeds={filtered}
-                  setSelectedBreed={setSelectedBreed}
-                  selectedBreed={selectedBreed}
-                />
-              </div>
-            </div>
-          ) : (
-            <p>no breeds to match your filter input</p>
-          )}
-        </div>
+  const renderBreedSection = () => {
+    if (loading) return <p className={styles.loading}>Loading dog breeds...</p>
+    if (error) return <p className={styles.error}>Error loading breeds</p>
 
-        <BreedImages selectedBreed={selectedBreed } />
+    return (
+      <div className={styles.sidebar}>
+        <h1 className={styles.title}>Dog Breeds</h1>
+        <SearchInput value={filterInput} onChange={setFilterInput} />
+        <BreedList
+          breeds={filtered}
+          setSelectedBreed={setSelectedBreed}
+          selectedBreed={selectedBreed}
+        />
       </div>
-    </>
+    )
+  }
+
+  return (
+    <div className={styles.page}>
+      {renderBreedSection()}
+      <BreedImages selectedBreed={selectedBreed} />
+    </div>
   );
 }
