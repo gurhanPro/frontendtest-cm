@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import './App.css'
+import BreedList from './BreedList'
 
 function App() {
 
   return (
     <>
-      <h1>cloud smiths</h1>
+      <BreedList />
     </>
   )
 }
