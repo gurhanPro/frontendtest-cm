@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import type { BreedType } from "../../types";
+import type { BreedType, Favourite } from "../../types";
+import useAuth from "../../hooks/useAuth";
 import { config } from "../../config";
 import styles from "./BreedImages.module.scss";
 
@@ -7,13 +8,15 @@ export default function BreedImages({ selectedBreed }: { selectedBreed: BreedTyp
   const [selectedBreedImages, setSelectedBreedImages] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [favourites, setFavourites] = useState<string[]>([])
+  const [favourites, setFavourites] = useState<Favourite[]>([])
   const cache = useRef(new Map<string, string[]>())
+  const { user } = useAuth()
 
   useEffect(() => {
+    if (!user) return
     const fetchFavourites = async () => {
       try {
-        const res = await fetch(config.favouritesApiUrl)
+        const res = await fetch(`${config.favouritesApiUrl}?userId=${user.id}`)
         const data = await res.json()
         setFavourites(data)
       } catch {
@@ -21,18 +24,31 @@ export default function BreedImages({ selectedBreed }: { selectedBreed: BreedTyp
       }
     }
     fetchFavourites()
-  }, [])
+  }, [user])
+
+  const isFavourited = (imageUrl: string) => {
+    return favourites.some(fav => fav.imageUrl === imageUrl)
+  }
 
   const toggleFavourite = async (imageUrl: string) => {
-    const isFav = favourites.includes(imageUrl)
+    if (!user) return
     try {
-      const res = await fetch(config.favouritesApiUrl, {
-        method: isFav ? "DELETE" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageUrl }),
-      })
-      const data = await res.json()
-      setFavourites(data)
+      if (isFavourited(imageUrl)) {
+        await fetch(config.favouritesApiUrl, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ imageUrl, userId: user.id }),
+        })
+        setFavourites(prev => prev.filter(fav => fav.imageUrl !== imageUrl))
+      } else {
+        const res = await fetch(config.favouritesApiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ imageUrl, userId: user.id }),
+        })
+        const data = await res.json()
+        setFavourites(prev => [...prev, data])
+      }
     } catch {
       setError("Failed to update favourite")
     }
@@ -80,9 +96,9 @@ export default function BreedImages({ selectedBreed }: { selectedBreed: BreedTyp
             </div>
             <button
               onClick={() => toggleFavourite(imageUrl)}
-              className={`${styles.favBtn} ${favourites.includes(imageUrl) ? styles.favourited : ''}`}
+              className={`${styles.favBtn} ${isFavourited(imageUrl) ? styles.favourited : ''}`}
             >
-              {favourites.includes(imageUrl) ? "Remove Favourite" : "Add Favourite"}
+              {isFavourited(imageUrl) ? "Remove Favourite" : "Add Favourite"}
             </button>
           </div>
         ))}

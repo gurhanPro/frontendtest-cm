@@ -14,3 +14,10 @@ export type AuthResponse = User & {
   accessToken: string;
   refreshToken: string;
 };
+
+export type Favourite = {
+  id: number;
+  imageUrl: string;
+  userId: number;
+  createdAt: string;
+};

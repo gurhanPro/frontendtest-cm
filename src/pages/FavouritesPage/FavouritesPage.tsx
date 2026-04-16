@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
+import type { Favourite } from "../../types";
+import useAuth from "../../hooks/useAuth";
 import { config } from "../../config";
 import styles from "./FavouritesPage.module.scss";
 
 export default function FavouritesPage() {
-  const [favourites, setFavourites] = useState<string[]>([]);
+  const [favourites, setFavourites] = useState<Favourite[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
+    if (!user) return;
     const fetchFavourites = async () => {
       try {
-        const res = await fetch(config.favouritesApiUrl);
+        const res = await fetch(`${config.favouritesApiUrl}?userId=${user.id}`);
         const data = await res.json();
         setFavourites(data);
       } catch {
@@ -20,17 +24,17 @@ export default function FavouritesPage() {
       }
     };
     fetchFavourites();
-  }, []);
+  }, [user]);
 
   const removeFavourite = async (imageUrl: string) => {
+    if (!user) return;
     try {
-      const res = await fetch(config.favouritesApiUrl, {
+      await fetch(config.favouritesApiUrl, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageUrl }),
+        body: JSON.stringify({ imageUrl, userId: user.id }),
       });
-      const data = await res.json();
-      setFavourites(data);
+      setFavourites(prev => prev.filter(fav => fav.imageUrl !== imageUrl));
     } catch {
       setError("Failed to remove favourite");
     }
@@ -46,13 +50,13 @@ export default function FavouritesPage() {
         <p className={styles.empty}>No favourites yet. Go pick some dogs!</p>
       ) : (
         <div className={styles.grid}>
-          {favourites.map((url) => (
-            <div key={url} className={styles.card}>
+          {favourites.map((fav) => (
+            <div key={fav.id} className={styles.card}>
               <div className={styles.imageWrapper}>
-                <img src={url} alt="Favourite dog" className={styles.image} />
+                <img src={fav.imageUrl} alt="Favourite dog" className={styles.image} />
               </div>
               <button
-                onClick={() => removeFavourite(url)}
+                onClick={() => removeFavourite(fav.imageUrl)}
                 className={styles.removeBtn}
               >
                 Remove
