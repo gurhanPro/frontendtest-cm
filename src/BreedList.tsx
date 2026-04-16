@@ -44,14 +44,16 @@ export default function BreedList() {
     <>
       {loading ? <p>Loading dog breeds ...</p> : null}
       {error ? <p>error loading</p> : null}
-      {filtered.length > 0 && (
+      <div>
+        <h1>BreedLists</h1>
+        <input
+          value={filterInput}
+          onChange={(event) => setFilterInput(event.target.value)}
+          placeholder="type a bread name"
+        />
+      </div>
+      {filtered.length > 0 ? (
         <div>
-          <h1>BreedLists</h1>
-          <input
-            value={filterInput}
-            onChange={(event)=> setFilterInput(event.target.value)}
-            placeholder="type a bread name"
-          />
           <div style={{ display: "flex", gap: "100px" }}>
             <ul>
               {filtered.map((breed) => (
@@ -60,6 +62,8 @@ export default function BreedList() {
             </ul>
           </div>
         </div>
+      ) : (
+        <p>no breeds to match your filter input</p>
       )}
     </>
   );
