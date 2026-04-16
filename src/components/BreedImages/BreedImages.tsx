@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { BreedType } from "../../types";
+import styles from "./BreedImages.module.scss";
 
 export default function BreedImages({ selectedBreed }: { selectedBreed: BreedType | null }) {
   const [selectedBreedImages, setSelectedBreedImages] = useState<string[]>([])
@@ -33,10 +34,20 @@ export default function BreedImages({ selectedBreed }: { selectedBreed: BreedTyp
   }, [selectedBreed])
 
 
-  return <div>
-    <h2>selected breed: {selectedBreed?.name}</h2>
-    {loading && <p>Loading images...</p>}
-    {error && <p>{error}</p>}
-    {selectedBreed ? selectedBreedImages.map(imageUrl => <img key={imageUrl} src={imageUrl} alt={selectedBreed?.name} />) : 'No selected breed yet'}
-  </div>;
+  if (!selectedBreed) return <div className={styles.container}><p className={styles.empty}>Select a breed to view images</p></div>
+
+  return (
+    <div className={styles.container}>
+      <h2 className={styles.title}>{selectedBreed.name}</h2>
+      {loading && <p className={styles.loading}>Loading images...</p>}
+      {error && <p className={styles.error}>{error}</p>}
+      <div className={styles.grid}>
+        {selectedBreedImages.map(imageUrl => (
+          <div key={imageUrl} className={styles.imageWrapper}>
+            <img src={imageUrl} alt={selectedBreed.name} className={styles.image} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }

@@ -2,10 +2,21 @@
   display: flex;
   gap: 48px;
   padding: 24px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 24px;
+    padding: 16px;
+  }
 }
 
 .sidebar {
   min-width: 280px;
+
+  @media (max-width: 768px) {
+    min-width: unset;
+    width: 100%;
+  }
 }
 
 .title {
