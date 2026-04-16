@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import type { BreedsAPIResponse, BreedType } from "./types";
 import useDebounce from "./hooks/useDebounce";
+import SearchInput from "./components/SearchInput/SearchInput";
 
 export default function BreedList() {
   const [breeds, setBreeds] = useState<BreedType[]>([]);
@@ -62,10 +63,9 @@ export default function BreedList() {
       <div style={{ display: "flex", gap: "50px" }}>
         <div>
           <h1>BreedLists</h1>
-          <input
+          <SearchInput
             value={filterInput}
-            onChange={(event) => setFilterInput(event.target.value)}
-            placeholder="type a bread name"
+            onChange={setFilterInput}
           />
           {filtered.length > 0 ? (
             <div>
