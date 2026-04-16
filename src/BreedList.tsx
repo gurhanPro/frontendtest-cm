@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 type BreedType = { name: string; subBreeds: string[] };
 type BreedsAPIResponse = Record<string, string[]>;
@@ -36,7 +36,9 @@ export default function BreedList() {
     return () => clearTimeout(timer)
   },[filterInput])
 
-  const filtered = debouncedFitler ? breeds.filter(breed => breed.name.toLowerCase().includes(debouncedFitler.toLowerCase())) : breeds
+  const filtered = useMemo(()=> {
+    return debouncedFitler ? breeds.filter(breed => breed.name.toLowerCase().includes(debouncedFitler.toLowerCase())) : breeds
+  },[breeds, debouncedFitler])
 
   return (
     <>
