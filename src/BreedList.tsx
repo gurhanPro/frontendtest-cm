@@ -9,6 +9,7 @@ export default function BreedList() {
   const [error, setError] = useState(null);
   const [filterInput, setFilterInput] = useState("");
   const [selectedBreed, setSelectedBreed] = useState<BreedType | null>(null);
+  const [selectedBreedImages, setSelectedBreedImages] = useState([])
   const [debouncedFitler, setDebouncedFilter] = useState("");
 
   useEffect(() => {
@@ -38,6 +39,19 @@ export default function BreedList() {
     }, 300);
     return () => clearTimeout(timer);
   }, [filterInput]);
+
+
+  useEffect(()=> {
+    const fetch3RandomImages = async ()=> {
+      const res = await fetch(`https://dog.ceo/api/breed/${selectedBreed?.name}/images/random/3`)
+      const resBody = await res.json()
+      console.log('images : ', resBody)
+      setSelectedBreedImages(resBody.message)
+    }
+
+    fetch3RandomImages()
+
+  }, [selectedBreed])
 
   const filtered = useMemo(() => {
     return debouncedFitler
@@ -87,6 +101,7 @@ export default function BreedList() {
 
         <div>
           <h2>selected breed: {selectedBreed?.name}</h2>
+          {selectedBreedImages.map(img=> <img src={img} />)}
         </div>
       </div>
     </>
