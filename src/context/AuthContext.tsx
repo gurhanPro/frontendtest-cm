@@ -6,6 +6,7 @@ type AuthContextType = {
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
+  isLoading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -18,6 +19,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [refreshToken, setRefreshToken] = useState<string | null>(
     localStorage.getItem("refreshToken")
   );
+  const [isLoading, setIsLoading] = useState(!!localStorage.getItem("accessToken"));
 
   useEffect(() => {
     if (!accessToken) return;
@@ -32,11 +34,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .then((data) => setUser(data))
       .catch(() => {
         if (refreshToken) {
-          refreshSession();
+          return refreshSession();
         } else {
           clearAuth();
         }
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const refreshSession = async () => {
@@ -94,7 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
