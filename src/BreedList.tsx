@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import type { BreedsAPIResponse, BreedType } from "./types";
+import useDebounce from "./hooks/useDebounce";
 
 export default function BreedList() {
   const [breeds, setBreeds] = useState<BreedType[]>([]);
@@ -8,7 +9,7 @@ export default function BreedList() {
   const [filterInput, setFilterInput] = useState("");
   const [selectedBreed, setSelectedBreed] = useState<BreedType | null>(null);
   const [selectedBreedImages, setSelectedBreedImages] = useState([])
-  const [debouncedFitler, setDebouncedFilter] = useState("");
+  const debouncedFitler = useDebounce(filterInput, 300)
 
   useEffect(() => {
     const fetchBreeds = async () => {
@@ -30,13 +31,6 @@ export default function BreedList() {
     };
     fetchBreeds();
   }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedFilter(filterInput);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [filterInput]);
 
 
   useEffect(()=> {
